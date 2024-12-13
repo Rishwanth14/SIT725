@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Google Icon Font -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Materialize CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+  <!-- Meta for Mobile Optimization -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Food Web App</title>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav>
+    <div class="nav-wrapper teal">
+      <a href="#" class="brand-logo">Foodie</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="#categories">Categories</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Banner -->
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <h1 class="header center teal-text text-darken-2">Welcome to Foodie</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">Explore your favorite cuisines, recipes, and restaurants</h5>
+      </div>
+      <div class="row center">
+        <a href="#categories" class="btn-large waves-effect waves-light teal">Get Started</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Food Categories -->
+  <div class="container" id="categories">
+    <h2 class="center-align">Categories</h2>
+    <div class="row">
+      <!-- Card 1 -->
+      <div class="col s12 m4">
+        <div class="card">
+          <div class="card-image">
+            <img src="https://via.placeholder.com/300x200" alt="Desserts">
+            <span class="card-title">Desserts</span>
+          </div>
+          <div class="card-content">
+            <p>Explore our collection of mouth-watering desserts to satisfy your sweet tooth.</p>
+          </div>
+          <div class="card-action">
+            <a href="#">View Recipes</a>
+          </div>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="col s12 m4">
+        <div class="card">
+          <div class="card-image">
+            <img src="https://via.placeholder.com/300x200" alt="Healthy Foods">
+            <span class="card-title">Healthy Foods</span>
+          </div>
+          <div class="card-content">
+            <p>Discover recipes for wholesome and nutritious meals for a healthy lifestyle.</p>
+          </div>
+          <div class="card-action">
+            <a href="#">View Recipes</a>
+          </div>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="col s12 m4">
+        <div class="card">
+          <div class="card-image">
+            <img src="https://via.placeholder.com/300x200" alt="Fast Foods">
+            <span class="card-title">Fast Foods</span>
+          </div>
+          <div class="card-content">
+            <p>Quick and delicious fast-food recipes you can make at home in minutes.</p>
+          </div>
+          <div class="card-action">
+            <a href="#">View Recipes</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Us Section -->
+  <div class="parallax-container" id="about">
+    <div class="parallax"><img src="https://via.placeholder.com/800x400" alt="About Us"></div>
+    <div class="section white">
+      <div class="row container">
+        <h2 class="header">About Us</h2>
+        <p class="grey-text text-darken-3 lighten-3">
+          Foodie is your one-stop solution for exploring recipes, finding nearby restaurants, and learning
+          cooking tips from the best chefs around the world.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Section -->
+  <div class="container" id="contact">
+    <h2 class="center-align">Contact Us</h2>
+    <form>
+      <div class="row">
+        <div class="input-field col s12 m6">
+          <input id="name" type="text" class="validate">
+          <label for="name">Name</label>
+        </div>
+        <div class="input-field col s12 m6">
+          <input id="email" type="email" class="validate">
+          <label for="email">Email</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <textarea id="message" class="materialize-textarea"></textarea>
+          <label for="message">Message</label>
+        </div>
+      </div>
+      <div class="row center">
+        <button class="btn waves-effect waves-light teal" type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <footer class="page-footer teal">
+    <div class="container">
+      <div class="row">
+        <div class="col s12">
+          <h5 class="white-text">Foodie</h5>
+          <p class="grey-text text-lighten-4">Explore delicious recipes and amazing restaurants with us!</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+        © 2024 Foodie, All Rights Reserved
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Parallax
+      var elems = document.querySelectorAll('.parallax');
+      M.Parallax.init(elems);
+    });
+  </script>
+</body>
+</html>
+
