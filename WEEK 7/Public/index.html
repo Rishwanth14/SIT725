@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Food Web App</title>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav>
+    <div class="nav-wrapper teal">
+      <a href="#" class="brand-logo">Foodie</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="#categories">Categories</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Banner -->
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <h1 class="header center teal-text text-darken-2">Welcome to Foodie</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">Explore your favorite cuisines, recipes, and restaurants</h5>
+      </div>
+      <div class="row center">
+        <a href="#categories" class="btn-large waves-effect waves-light teal">Get Started</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Real-time Recipe Updates Section -->
+  <div class="container">
+    <div class="row">
+      <div class="col s12">
+        <div id="live-updates" class="card-panel teal lighten-4" style="display: none;">
+          <span class="white-text"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Food Categories with Real-time Updates -->
+  <div class="container" id="categories">
+    <h2 class="center-align">Categories</h2>
+    <div class="row" id="recipe-cards">
+      <!-- Cards will be dynamically updated -->
+      <div class="col s12 m4">
+        <div class="card">
+          <div class="card-image">
+            <img src="https://via.placeholder.com/300x200" alt="Desserts">
+            <span class="card-title">Desserts</span>
+          </div>
+          <div class="card-content">
+            <p>Explore our collection of mouth-watering desserts to satisfy your sweet tooth.</p>
+            <div class="rating-section">
+              <span class="rating-display">Rating: 4.5/5</span>
+              <a class="waves-effect waves-light btn-small rate-recipe" data-category="desserts">Rate</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Additional cards... -->
+    </div>
+  </div>
+
+  <!-- Contact Section with Real-time Feedback -->
+  <div class="container" id="contact">
+    <h2 class="center-align">Contact Us</h2>
+    <form id="contact-form">
+      <div class="row">
+        <div class="input-field col s12 m6">
+          <input id="name" type="text" class="validate" required>
+          <label for="name">Name</label>
+        </div>
+        <div class="input-field col s12 m6">
+          <input id="email" type="email" class="validate" required>
+          <label for="email">Email</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <textarea id="message" class="materialize-textarea" required></textarea>
+          <label for="message">Message</label>
+        </div>
+      </div>
+      <div class="row center">
+        <button class="btn waves-effect waves-light teal" type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <footer class="page-footer teal">
+    <div class="container">
+      <div class="row">
+        <div class="col s12">
+          <h5 class="white-text">Foodie</h5>
+          <p class="grey-text text-lighten-4">Explore delicious recipes and amazing restaurants with us!</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+        © 2024 Foodie, All Rights Reserved
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Socket.IO
+      const socket = io();
+
+      // Initialize Materialize components
+      var elems = document.querySelectorAll('.parallax');
+      M.Parallax.init(elems);
+
+      // Handle live updates display
+      const liveUpdates = document.getElementById('live-updates');
+      const updateMessage = liveUpdates.querySelector('span');
+
+      // Socket event listeners
+      socket.on('connect', () => {
+        console.log('Connected to server');
+      });
+
+      socket.on('recipe_added', (data) => {
+        updateMessage.textContent = `New recipe added in ${data.category}!`;
+        liveUpdates.style.display = 'block';
+        setTimeout(() => {
+          liveUpdates.style.display = 'none';
+        }, 3000);
+      });
+
+      socket.on('rating_updated', (data) => {
+        updateMessage.textContent = `Rating updated for ${data.category}!`;
+        liveUpdates.style.display = 'block';
+        setTimeout(() => {
+          liveUpdates.style.display = 'none';
+        }, 3000);
+      });
+
+      // Handle recipe rating
+      document.querySelectorAll('.rate-recipe').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const category = e.target.dataset.category;
+          const rating = Math.random() * 2 + 3; // Random rating between 3-5
+          socket.emit('rate_recipe', {
+            category: category,
+            rating: rating.toFixed(1)
+          });
+        });
+      });
+
+      // Handle contact form submission
+      document.getElementById('contact-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = {
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          message: document.getElementById('message').value
+        };
+        
+        socket.emit('contact_message', formData);
+      });
+
+      socket.on('message_received', (response) => {
+        M.toast({html: response.message});
+        document.getElementById('contact-form').reset();
+      });
+    });
+  </script>
+</body>
+</html>
