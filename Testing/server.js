@@ -1,65 +1,25 @@
-// server.js
 const express = require('express');
+const productRoutes = require('./routes/product.routes');
+
 const app = express();
-
-// Middleware to parse JSON
 app.use(express.json());
+app.use('/api/products', productRoutes);
 
-// In-memory product database
-let products = [
-  { id: 1, name: 'Product A', price: 100 },
-  { id: 2, name: 'Product B', price: 150 }
-];
+let server; // Reference to the server instance
 
-// Route to get all products
-app.get('/api/products', (req, res) => {
-  res.status(200).json(products);
-});
+// Start the server function
+const startServer = (port = 3000) => {
+  server = app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
+  return server;
+};
 
-// Route to get a product by ID
-app.get('/api/products/:id', (req, res) => {
-  const product = products.find(p => p.id === parseInt(req.params.id));
-  if (!product) return res.status(404).send('Product not found');
-  res.status(200).json(product);
-});
+// Stop the server function
+const stopServer = () => {
+  if (server) {
+    server.close();
+  }
+};
 
-// Route to create a new product
-app.post('/api/products', (req, res) => {
-  const { name, price } = req.body;
-  const newProduct = {
-    id: products.length + 1,
-    name,
-    price
-  };
-  products.push(newProduct);
-  res.status(201).json(newProduct);
-});
-
-// Route to update a product
-app.put('/api/products/:id', (req, res) => {
-  const product = products.find(p => p.id === parseInt(req.params.id));
-  if (!product) return res.status(404).send('Product not found');
-
-  const { name, price } = req.body;
-  product.name = name || product.name;
-  product.price = price || product.price;
-
-  res.status(200).json(product);
-});
-
-// Route to delete a product
-app.delete('/api/products/:id', (req, res) => {
-  const index = products.findIndex(p => p.id === parseInt(req.params.id));
-  if (index === -1) return res.status(404).send('Product not found');
-
-  const deletedProduct = products.splice(index, 1);
-  res.status(200).json(deletedProduct);
-});
-
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
-module.exports = app; // Export the app for testing
+module.exports = { app, startServer, stopServer }; // Export functions for testing
